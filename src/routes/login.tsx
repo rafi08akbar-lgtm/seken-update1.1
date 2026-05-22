@@ -2,8 +2,8 @@ import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-ro
 import { useState } from "react";
 import { z } from "zod";
 import toast from "react-hot-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/shared/integrations/supabase/client";
+import { lovable } from "@/shared/integrations/lovable/index";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ redirect: z.string().optional() }),

@@ -2,9 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import confetti from "canvas-confetti";
-import { useCart } from "@/lib/store";
-import { formatIDR } from "@/lib/products";
-import { createOnlineOrder } from "@/lib/transactions.functions";
+import { useCart } from "@/shared/lib/store";
+import { formatIDR } from "@/shared/lib/products";
+import { createOnlineOrder } from "@/backend/functions/transactions.functions";
 
 export const Route = createFileRoute("/_authenticated/checkout")({
   component: CheckoutPage,

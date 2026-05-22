@@ -2,11 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { Zap, Truck, ShieldCheck, Star } from "lucide-react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { CATEGORIES } from "@/lib/products";
-import { listProducts } from "@/lib/products.functions";
-import { ProductCard } from "@/components/ProductCard";
-import heroBg from "@/assets/hero-bg.jpg";
-import mascot from "@/assets/mascot.png";
+import { CATEGORIES } from "@/shared/lib/products";
+import { listProducts } from "@/backend/functions/products.functions";
+import { ProductCard } from "@/frontend/components/ProductCard";
+import heroBg from "@/frontend/assets/hero-bg.jpg";
+import mascot from "@/frontend/assets/mascot.png";
 
 const productsQuery = queryOptions({
   queryKey: ["products"],

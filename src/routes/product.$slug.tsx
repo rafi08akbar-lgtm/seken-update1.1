@@ -4,10 +4,10 @@ import { useState } from "react";
 import confetti from "canvas-confetti";
 import toast from "react-hot-toast";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { formatIDR, productImage, categoryLabel } from "@/lib/products";
-import { getProductBySlug, listProducts } from "@/lib/products.functions";
-import { useCart } from "@/lib/store";
-import { ProductCard } from "@/components/ProductCard";
+import { formatIDR, productImage, categoryLabel } from "@/shared/lib/products";
+import { getProductBySlug, listProducts } from "@/backend/functions/products.functions";
+import { useCart } from "@/shared/lib/store";
+import { ProductCard } from "@/frontend/components/ProductCard";
 
 const allProductsQuery = queryOptions({
   queryKey: ["products"],

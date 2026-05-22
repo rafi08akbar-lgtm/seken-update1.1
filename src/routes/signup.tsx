@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
+import { supabase } from "@/shared/integrations/supabase/client";
+import { lovable } from "@/shared/integrations/lovable/index";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,

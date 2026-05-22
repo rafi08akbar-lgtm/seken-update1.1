@@ -22,29 +22,28 @@ Kode diorganisasi berdasarkan **fitur/domain**, bukan berdasarkan tipe file. Set
 
 ```
 src/
-├── components/       # Komponen UI bersama (shared)
-├── lib/              # Logic bisnis per-domain (products, transactions, auth, store)
-├── routes/           # Halaman berdasarkan fitur (shop, admin, cart, checkout)
-├── integrations/     # Integrasi pihak ketiga (Supabase)
-└── hooks/            # Custom hooks bersama
+├── frontend/         # Komponen UI, hooks, assets
+├── backend/          # Server logic, server functions, middleware, server-only Supabase
+├── shared/           # Core domain (lib, integrations, lovable)
+└── routes/           # Routing halaman (TanStack Router)
 ```
 
 ### 🧱 SOLID Principles
 
 | Prinsip | Penerapan |
 |---------|-----------|
-| **S** — Single Responsibility | Setiap file/modul hanya bertanggung jawab atas satu hal. Contoh: `auth.ts` hanya menangani autentikasi, `products.functions.ts` hanya menangani logika produk. |
+| **S** — Single Responsibility | Setiap file/modul hanya bertanggung jawab atas satu hal. Contoh: `shared/lib/auth.ts` hanya menangani autentikasi, `backend/functions/products.functions.ts` hanya menangani logika produk. |
 | **O** — Open/Closed | Komponen UI menggunakan `shadcn/ui` + `class-variance-authority` sehingga mudah di-extend tanpa mengubah source asli. |
 | **L** — Liskov Substitution | Komponen Radix UI digunakan sebagai abstraksi yang bisa diganti dengan implementasi lain tanpa merusak sistem. |
-| **I** — Interface Segregation | Server functions dipisah per domain (`products.functions.ts`, `transactions.functions.ts`) — client hanya mengimpor yang dibutuhkan. |
-| **D** — Dependency Inversion | Akses database melalui abstraksi Supabase client (`client.ts`, `client.server.ts`), bukan query langsung. |
+| **I** — Interface Segregation | Server functions dipisah per domain (`backend/functions/products.functions.ts`, `backend/functions/transactions.functions.ts`) — client hanya mengimpor yang dibutuhkan. |
+| **D** — Dependency Inversion | Akses database melalui abstraksi Supabase client (`shared/integrations/supabase/client.ts`, `backend/supabase/client.server.ts`), bukan query langsung. |
 
 ### 🎯 SSOT — Single Source of Truth
 
-- **State Management**: Zustand store (`lib/store.ts`) sebagai satu-satunya sumber kebenaran untuk state client-side (cart, UI state).
+- **State Management**: Zustand store (`shared/lib/store.ts`) sebagai satu-satunya sumber kebenaran untuk state client-side (cart, UI state).
 - **Database**: Supabase PostgreSQL sebagai satu-satunya sumber kebenaran untuk data persisten (produk, transaksi, user roles).
 - **Routing**: `routeTree.gen.ts` di-generate otomatis dari file-based routing — satu sumber untuk semua definisi route.
-- **Tipe Data**: `integrations/supabase/types.ts` sebagai satu-satunya sumber tipe database.
+- **Tipe Data**: `shared/integrations/supabase/types.ts` sebagai satu-satunya sumber tipe database.
 
 ### 🔷 Hexagonal Architecture (Ports & Adapters)
 
@@ -53,17 +52,18 @@ Arsitektur heksagonal memisahkan **core logic** dari **infrastruktur eksternal**
 ```
 ┌─────────────────────────────────────────┐
 │              CORE DOMAIN                │
-│   lib/products.ts, lib/auth.ts,         │
-│   lib/store.ts, lib/transactions.*      │
+│   shared/lib/products.ts,               │
+│   shared/lib/auth.ts,                   │
+│   shared/lib/store.ts, etc.             │
 ├─────────────────────────────────────────┤
 │          PORTS (Interfaces)             │
 │   Server Functions (createServerFn)     │
 │   React Hooks (useSession, useMyRole)   │
 ├─────────────────────────────────────────┤
 │        ADAPTERS (Infrastructure)        │
-│   integrations/supabase/* (DB Adapter)  │
-│   components/* (UI Adapter)             │
-│   routes/* (HTTP/Routing Adapter)       │
+│   shared/integrations/supabase/*        │
+│   frontend/components/*                 │
+│   routes/*                              │
 └─────────────────────────────────────────┘
 ```
 
@@ -96,9 +96,9 @@ Octagonal Architecture memperluas konsep Hexagonal dengan menambahkan lapisan ke
 
 | Layer | File | Fungsi |
 |-------|------|--------|
-| Auth Middleware | `auth-middleware.ts`, `auth-attacher.ts` | Validasi token & injeksi Supabase context |
-| Error Handling | `error-capture.ts`, `error-page.ts`, `server.ts` | Tangkap error & render halaman error |
-| Validation | `transactions.functions.ts` (Zod schemas) | Validasi input di sisi server |
+| Auth Middleware | `backend/middleware/auth-middleware.ts`, `backend/middleware/auth-attacher.ts` | Validasi token & injeksi Supabase context |
+| Error Handling | `shared/lib/error-capture.ts`, `shared/lib/error-page.ts`, `backend/server.ts` | Tangkap error & render halaman error |
+| Validation | `backend/functions/transactions.functions.ts` (Zod schemas) | Validasi input di sisi server |
 | RBAC | `has_role()` SQL + `isAdmin()` TS | Kontrol akses berbasis peran |
 | RLS | Supabase RLS Policies | Keamanan data di level database |
 

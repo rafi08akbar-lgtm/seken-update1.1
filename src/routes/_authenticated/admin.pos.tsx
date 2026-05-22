@@ -3,9 +3,9 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Plus, Minus, Trash2 } from "lucide-react";
-import { listProducts } from "@/lib/products.functions";
-import { adminCreateOfflineTransaction } from "@/lib/transactions.functions";
-import { formatIDR, type Product } from "@/lib/products";
+import { listProducts } from "@/backend/functions/products.functions";
+import { adminCreateOfflineTransaction } from "@/backend/functions/transactions.functions";
+import { formatIDR, type Product } from "@/shared/lib/products";
 
 export const Route = createFileRoute("/_authenticated/admin/pos")({
   component: PosPage,

@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet, Link, redirect } from "@tanstack/react-router";
 import { LayoutDashboard, Package, ShoppingBag, Receipt } from "lucide-react";
-import { getMyRole } from "@/lib/transactions.functions";
+import { getMyRole } from "@/backend/functions/transactions.functions";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   beforeLoad: async () => {

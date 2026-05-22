@@ -3,8 +3,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
-import { adminListProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct } from "@/lib/products.functions";
-import { formatIDR, CATEGORIES, type Product } from "@/lib/products";
+import { adminListProducts, adminCreateProduct, adminUpdateProduct, adminDeleteProduct } from "@/backend/functions/products.functions";
+import { formatIDR, CATEGORIES, type Product } from "@/shared/lib/products";
 
 export const Route = createFileRoute("/_authenticated/admin/products")({
   component: AdminProductsPage,

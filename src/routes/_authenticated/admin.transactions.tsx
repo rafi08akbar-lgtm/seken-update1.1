@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { adminListTransactions, adminUpdateTransactionStatus } from "@/lib/transactions.functions";
-import { formatIDR } from "@/lib/products";
+import { adminListTransactions, adminUpdateTransactionStatus } from "@/backend/functions/transactions.functions";
+import { formatIDR } from "@/shared/lib/products";
 
 export const Route = createFileRoute("/_authenticated/admin/transactions")({
   component: AdminTxPage,

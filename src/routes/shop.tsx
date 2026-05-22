@@ -3,9 +3,9 @@ import { useState } from "react";
 import { z } from "zod";
 import { Search } from "lucide-react";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { CATEGORIES, type Category } from "@/lib/products";
-import { listProducts } from "@/lib/products.functions";
-import { ProductCard } from "@/components/ProductCard";
+import { CATEGORIES, type Category } from "@/shared/lib/products";
+import { listProducts } from "@/backend/functions/products.functions";
+import { ProductCard } from "@/frontend/components/ProductCard";
 
 const productsQuery = queryOptions({
   queryKey: ["products"],

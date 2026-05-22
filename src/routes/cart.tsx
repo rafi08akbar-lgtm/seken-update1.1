@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Minus, Plus, X } from "lucide-react";
-import { useCart } from "@/lib/store";
-import { formatIDR, productImage, categoryLabel } from "@/lib/products";
-import mascot from "@/assets/mascot.png";
+import { useCart } from "@/shared/lib/store";
+import { formatIDR, productImage, categoryLabel } from "@/shared/lib/products";
+import mascot from "@/frontend/assets/mascot.png";
 
 export const Route = createFileRoute("/cart")({
   component: Cart,

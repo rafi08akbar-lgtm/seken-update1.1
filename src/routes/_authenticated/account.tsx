@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { listMyOrders } from "@/lib/transactions.functions";
-import { formatIDR } from "@/lib/products";
+import { listMyOrders } from "@/backend/functions/transactions.functions";
+import { formatIDR } from "@/shared/lib/products";
 
 export const Route = createFileRoute("/_authenticated/account")({
   component: AccountPage,

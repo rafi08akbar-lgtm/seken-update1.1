@@ -4,11 +4,11 @@ import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
-import mascot from "@/assets/mascot.png";
-import { supabase } from "@/integrations/supabase/client";
+import { Header } from "@/frontend/components/Header";
+import { Footer } from "@/frontend/components/Footer";
+import { WhatsAppButton } from "@/frontend/components/WhatsAppButton";
+import mascot from "@/frontend/assets/mascot.png";
+import { supabase } from "@/shared/integrations/supabase/client";
 
 function NotFoundComponent() {
   return (
