@@ -3,14 +3,471 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seken Update 1.1</title>
+    <title>SUKEN — Toko Anime Merchandise Jakarta</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#E63946',
+              secondary: '#FFBE0B',
+              ink: '#1A1A2E',
+              surface: '#F8F9FA',
+            },
+            fontFamily: {
+              display: ['Bangers', 'system-ui', 'sans-serif'],
+              heading: ['Fredoka', 'system-ui', 'sans-serif'],
+              sans: ['Nunito', 'system-ui', 'sans-serif'],
+            },
+            boxShadow: {
+              comic: '4px 4px 0 0 #1A1A2E',
+              'comic-lg': '6px 6px 0 0 #1A1A2E',
+              'comic-xl': '8px 8px 0 0 #1A1A2E',
+            }
+          }
+        }
+      }
+    </script>
+    
+    <style>
+      body {
+        font-family: 'Nunito', sans-serif;
+        font-weight: 600;
+        background-color: #ffffff;
+        color: #1A1A2E;
+      }
+      h1, h2, h3, h4 {
+        font-family: 'Bangers', sans-serif;
+        letter-spacing: 0.02em;
+      }
+      .text-stroke-thick {
+        -webkit-text-stroke: 3px #1A1A2E;
+      }
+      .text-stroke {
+        -webkit-text-stroke: 2px #1A1A2E;
+      }
+      .halftone {
+        background-image: radial-gradient(circle, #1A1A2E 1px, transparent 1.5px);
+        background-size: 10px 10px;
+      }
+      @keyframes float-y {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+      }
+      .animate-float {
+        animation: float-y 3s ease-in-out infinite;
+      }
+      @keyframes marquee {
+        from { transform: translateX(0); }
+        to { transform: translateX(-50%); }
+      }
+      .animate-marquee {
+        animation: marquee 25s linear infinite;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
-    <!-- 
-      Proyek ini menggunakan TanStack Start (SSR).
-      Struktur HTML utama sebenarnya di-render dari src/routes/__root.tsx.
-      File index.html ini disediakan sebagai fallback untuk Vite/Static deployment.
-    -->
+  <body class="overflow-x-hidden selection:bg-secondary selection:text-ink">
+    
+    <!-- Top Deployment Info Bar -->
+    <div class="bg-primary text-white text-xs font-black py-2 px-4 text-center border-b-[3px] border-ink flex items-center justify-center gap-2">
+      <span class="bg-ink text-secondary px-2 py-0.5 rounded text-[10px] animate-pulse">DEPLOY READY</span>
+      <span>Proyek ini siap dideploy ke Vercel! Server functions & SSR di-handle oleh TanStack Start.</span>
+      <a href="https://github.com/rafi08akbar-lgtm/seken-update1.1" target="_blank" class="underline text-secondary hover:text-white font-black ml-1">Buka Repository →</a>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white border-b-[3px] border-ink">
+      <div class="bg-ink text-secondary text-xs font-bold py-1.5 text-center uppercase tracking-wider">
+        📍 Ruko SUKEN · Jl. Otaku No. 9, Jakarta · Buka 09:00–21:00 WIB
+      </div>
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <a href="#" class="flex items-center gap-2 group">
+          <span class="relative">
+            <span class="text-3xl md:text-4xl font-display text-primary text-stroke-thick block leading-none">SUKEN</span>
+            <span class="absolute -top-2 -right-3 bg-secondary border-2 border-ink rounded-full w-5 h-5 flex items-center justify-center text-[10px] rotate-12 group-hover:rotate-45 transition-transform">⭐</span>
+          </span>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-1 font-heading font-bold">
+          <a href="#hero" class="px-4 py-2 hover:bg-secondary hover:-rotate-2 transition-transform rounded-lg">Home</a>
+          <a href="#categories" class="px-4 py-2 hover:bg-secondary hover:-rotate-2 transition-transform rounded-lg">Kategori</a>
+          <a href="#shop" class="px-4 py-2 hover:bg-secondary hover:-rotate-2 transition-transform rounded-lg">Produk Terlaris</a>
+          <a href="#contact" class="px-4 py-2 hover:bg-secondary hover:-rotate-2 transition-transform rounded-lg">Lokasi Ruko</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <button onclick="toggleCart()" class="relative bg-primary text-white border-[3px] border-ink rounded-lg px-4 h-10 flex items-center gap-2 font-black shadow-comic hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+            <span class="text-lg">🛒</span>
+            <span class="hidden sm:inline">Keranjang (Demo)</span>
+            <span id="cart-badge" class="bg-secondary text-ink text-xs font-black rounded-full w-6 h-6 flex items-center justify-center border-2 border-ink animate-bounce">0</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative overflow-hidden border-b-[3px] border-ink bg-white">
+      <div class="absolute inset-0 halftone opacity-[0.06] pointer-events-none"></div>
+      <div class="relative max-w-7xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block bg-secondary border-[3px] border-ink px-3 py-1 rounded-full text-sm font-black -rotate-3 shadow-comic">
+            ⚡ POWERED BY PURE ANIME ENERGY
+          </span>
+          <h1 class="font-display text-6xl md:text-8xl leading-[0.9] mt-4 text-ink">
+            UNLEASH<br />
+            YOUR <span class="text-primary text-stroke-thick">INNER</span><br />
+            <span class="text-primary text-stroke-thick">OTAKU!</span>
+          </h1>
+          <p class="mt-4 text-lg max-w-md text-slate-600 font-heading">
+            Pesan online & langsung diantar ke rumahmu, atau mampir ke ruko kami di Jakarta Barat untuk lihat barang aslinya!
+          </p>
+          <div class="flex flex-wrap gap-3 mt-6">
+            <a href="#shop" class="bg-primary text-white border-[3px] border-ink rounded-lg px-6 py-3 font-black text-lg shadow-comic-lg hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all">
+              LIHAT PRODUK →
+            </a>
+            <a href="#contact" class="bg-secondary text-ink border-[3px] border-ink rounded-lg px-6 py-3 font-black text-lg shadow-comic-lg hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-none transition-all">
+              LOKASI KAMI
+            </a>
+          </div>
+        </div>
+        <div class="relative flex justify-center">
+          <div class="absolute w-72 h-72 bg-secondary rounded-full filter blur-3xl opacity-50"></div>
+          <!-- Cute Custom Drawing Logo / Mascot Placeholder -->
+          <div class="relative bg-secondary border-[4px] border-ink rounded-2xl p-6 shadow-comic-xl rotate-3 animate-float w-72 md:w-96 text-center">
+            <div class="text-8xl">🦄</div>
+            <div class="font-display text-3xl mt-4 text-stroke text-white">SUKEN MASCOT</div>
+            <div class="text-xs font-bold text-ink uppercase mt-1 bg-white/70 border-2 border-ink py-0.5 rounded">Official Merch Hub</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ticker Banner -->
+    <section class="bg-ink text-secondary py-3 overflow-hidden border-b-[3px] border-ink">
+      <div class="flex animate-marquee whitespace-nowrap">
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">🔥 KOLEKSI BARU: One Piece Wano <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">📍 Mampir ke ruko kami di Jakarta <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">🛒 Bisa pesan online — kirim via kurir / ambil di ruko <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">⭐ Action figure limited — restock! <span class="text-primary ml-8">✦</span></span>
+        
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">🔥 KOLEKSI BARU: One Piece Wano <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">📍 Mampir ke ruko kami di Jakarta <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">🛒 Bisa pesan online — kirim via kurir / ambil di ruko <span class="text-primary ml-8">✦</span></span>
+        <span class="mx-8 font-black uppercase tracking-wider text-sm">⭐ Action figure limited — restock! <span class="text-primary ml-8">✦</span></span>
+      </div>
+    </section>
+
+    <!-- Kategori Section -->
+    <section id="categories" class="max-w-7xl mx-auto px-4 py-16">
+      <div class="text-center mb-10">
+        <h2 class="font-display text-5xl text-stroke-thick text-secondary">PILIH GEAR KAMU</h2>
+        <p class="text-slate-600 mt-2 font-heading">Kategori pilihan paling populer untuk koleksi kamu!</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        
+        <div class="block aspect-square border-[3px] border-ink rounded-2xl p-5 shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all bg-primary text-white">
+          <div class="text-5xl md:text-6xl">🧸</div>
+          <h3 class="font-display text-2xl md:text-3xl mt-3">Plushies</h3>
+          <p class="text-sm font-bold mt-1 opacity-90">Boneka anime lucu & super fluffy.</p>
+        </div>
+
+        <div class="block aspect-square border-[3px] border-ink rounded-2xl p-5 shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all bg-secondary text-ink">
+          <div class="text-5xl md:text-6xl">⚔️</div>
+          <h3 class="font-display text-2xl md:text-3xl mt-3">Cosplay</h3>
+          <p class="text-sm font-bold mt-1 opacity-90">Kostum & props berkualitas tinggi.</p>
+        </div>
+
+        <div class="block aspect-square border-[3px] border-ink rounded-2xl p-5 shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all bg-primary text-white">
+          <div class="text-5xl md:text-6xl">🤖</div>
+          <h3 class="font-display text-2xl md:text-3xl mt-3">Figure</h3>
+          <p class="text-sm font-bold mt-1 opacity-90">Action figure original & berlisensi.</p>
+        </div>
+
+        <div class="block aspect-square border-[3px] border-ink rounded-2xl p-5 shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all bg-secondary text-ink">
+          <div class="text-5xl md:text-6xl">🎒</div>
+          <h3 class="font-display text-2xl md:text-3xl mt-3">Aksesoris</h3>
+          <p class="text-sm font-bold mt-1 opacity-90">Gantungan kunci, tas, dan merch keren.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Hot Drops Section -->
+    <section id="shop" class="bg-surface border-y-[3px] border-ink py-16">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="flex items-end justify-between flex-wrap gap-4 mb-8">
+          <div>
+            <h2 class="font-display text-5xl text-stroke-thick text-primary">HOT DROPS 🔥</h2>
+            <p class="text-slate-600 mt-2 font-heading font-bold">Produk terlaris minggu ini yang banyak dicari fans.</p>
+          </div>
+          <!-- Filter Tabs -->
+          <div class="flex gap-2 bg-white p-1.5 border-[3px] border-ink rounded-xl">
+            <button onclick="filterProducts('all')" class="filter-tab px-3 py-1 font-black text-sm bg-primary text-white border-2 border-ink rounded-lg">Semua</button>
+            <button onclick="filterProducts('plush')" class="filter-tab px-3 py-1 font-black text-sm hover:bg-secondary rounded-lg">Plush</button>
+            <button onclick="filterProducts('figure')" class="filter-tab px-3 py-1 font-black text-sm hover:bg-secondary rounded-lg">Figure</button>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          
+          <!-- Product Card 1 -->
+          <div class="product-item show-all plush bg-white border-[3px] border-ink rounded-2xl overflow-hidden shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all relative">
+            <div class="absolute top-3 left-3 z-10">
+              <span class="px-2 py-0.5 text-xs font-black border-2 border-ink rounded-md rotate-[-4deg] bg-primary text-white">HOT</span>
+            </div>
+            <div class="aspect-square bg-yellow-100 flex items-center justify-center text-7xl select-none">🦊</div>
+            <div class="p-4 border-t-[3px] border-ink">
+              <p class="text-xs font-bold text-primary uppercase">Plushies</p>
+              <h3 class="font-heading font-bold text-base leading-tight mt-1 line-clamp-2">Kurama Plush Doll 30cm</h3>
+              <div class="flex items-center justify-between mt-3">
+                <span class="font-display text-xl text-ink">Rp 185.000</span>
+                <button onclick="addToCart('Kurama Plush Doll 30cm')" class="w-10 h-10 bg-primary text-white border-2 border-ink rounded-full flex items-center justify-center hover:rotate-90 hover:scale-110 transition-transform">
+                  <span class="text-lg font-bold">+</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 2 -->
+          <div class="product-item show-all figure bg-white border-[3px] border-ink rounded-2xl overflow-hidden shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all relative">
+            <div class="absolute top-3 left-3 z-10">
+              <span class="px-2 py-0.5 text-xs font-black border-2 border-ink rounded-md rotate-[-4deg] bg-primary text-white">HOT</span>
+            </div>
+            <div class="aspect-square bg-red-100 flex items-center justify-center text-7xl select-none">👒</div>
+            <div class="p-4 border-t-[3px] border-ink">
+              <p class="text-xs font-bold text-primary uppercase">Figure</p>
+              <h3 class="font-heading font-bold text-base leading-tight mt-1 line-clamp-2">Luffy Gear 5 Nika Figure</h3>
+              <div class="flex items-center justify-between mt-3">
+                <span class="font-display text-xl text-ink">Rp 350.000</span>
+                <button onclick="addToCart('Luffy Gear 5 Nika Figure')" class="w-10 h-10 bg-primary text-white border-2 border-ink rounded-full flex items-center justify-center hover:rotate-90 hover:scale-110 transition-transform">
+                  <span class="text-lg font-bold">+</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 3 -->
+          <div class="product-item show-all figure bg-white border-[3px] border-ink rounded-2xl overflow-hidden shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all relative">
+            <div class="aspect-square bg-blue-100 flex items-center justify-center text-7xl select-none">⚡</div>
+            <div class="p-4 border-t-[3px] border-ink">
+              <p class="text-xs font-bold text-primary uppercase">Figure</p>
+              <h3 class="font-heading font-bold text-base leading-tight mt-1 line-clamp-2">Zoro Enma Sword Master Figure</h3>
+              <div class="flex items-center justify-between mt-3">
+                <span class="font-display text-xl text-ink">Rp 420.000</span>
+                <button onclick="addToCart('Zoro Enma Sword Master Figure')" class="w-10 h-10 bg-primary text-white border-2 border-ink rounded-full flex items-center justify-center hover:rotate-90 hover:scale-110 transition-transform">
+                  <span class="text-lg font-bold">+</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Card 4 -->
+          <div class="product-item show-all plush bg-white border-[3px] border-ink rounded-2xl overflow-hidden shadow-comic hover:shadow-comic-lg hover:-translate-y-1 transition-all relative">
+            <div class="aspect-square bg-purple-100 flex items-center justify-center text-7xl select-none">🦉</div>
+            <div class="p-4 border-t-[3px] border-ink">
+              <p class="text-xs font-bold text-primary uppercase">Plushies</p>
+              <h3 class="font-heading font-bold text-base leading-tight mt-1 line-clamp-2">Totoro Fluffy Giant Plush</h3>
+              <div class="flex items-center justify-between mt-3">
+                <span class="font-display text-xl text-ink">Rp 220.000</span>
+                <button onclick="addToCart('Totoro Fluffy Giant Plush')" class="w-10 h-10 bg-primary text-white border-2 border-ink rounded-full flex items-center justify-center hover:rotate-90 hover:scale-110 transition-transform">
+                  <span class="text-lg font-bold">+</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section class="max-w-7xl mx-auto px-4 py-16">
+      <h2 class="font-display text-5xl text-stroke-thick text-secondary text-center mb-12">MENGAPA SUKEN?</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        
+        <div class="bg-white border-[3px] border-ink rounded-2xl p-6 shadow-comic text-center">
+          <div class="w-16 h-16 mx-auto bg-primary text-white rounded-full border-[3px] border-ink flex items-center justify-center mb-4 text-3xl font-bold">🛡️</div>
+          <h3 class="font-display text-2xl">100% Original</h3>
+          <p class="text-slate-600 mt-2 text-sm font-bold">Semua figure, plush & kostum dijamin memiliki lisensi resmi & berkualitas tinggi.</p>
+        </div>
+
+        <div class="bg-white border-[3px] border-ink rounded-2xl p-6 shadow-comic text-center">
+          <div class="w-16 h-16 mx-auto bg-primary text-white rounded-full border-[3px] border-ink flex items-center justify-center mb-4 text-3xl font-bold">🏪</div>
+          <h3 class="font-display text-2xl">Ruko Fisik & Online</h3>
+          <p class="text-slate-600 mt-2 text-sm font-bold">Belanja instan dari situs, atau datang langsung ke ruko kami di Jakarta Barat.</p>
+        </div>
+
+        <div class="bg-white border-[3px] border-ink rounded-2xl p-6 shadow-comic text-center">
+          <div class="w-16 h-16 mx-auto bg-primary text-white rounded-full border-[3px] border-ink flex items-center justify-center mb-4 text-3xl font-bold">⚡</div>
+          <h3 class="font-display text-2xl">Komunitas Otaku</h3>
+          <p class="text-slate-600 mt-2 text-sm font-bold">Dikelola dan dikurasi oleh tim pecinta anime yang memahami detail koleksi terbaik.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="bg-ink text-white py-16 border-y-[3px] border-ink">
+      <div class="max-w-7xl mx-auto px-4">
+        <h2 class="font-display text-5xl text-stroke-thick text-secondary text-center mb-12">SUARA FANS</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          
+          <div class="bg-white text-ink border-[3px] border-secondary rounded-2xl p-6 relative">
+            <div class="absolute -top-4 left-4 bg-secondary text-ink border-[3px] border-ink rounded-full w-12 h-12 flex items-center justify-center text-2xl">🌸</div>
+            <div class="flex gap-1 mt-4 mb-2 text-yellow-500">★★★★★</div>
+            <p class="text-sm leading-relaxed font-bold">"Plush doll nya sangat lembut dan jahitannya rapi! Hanya butuh 2 hari sampai di rumah."</p>
+            <p class="font-black mt-3 text-primary">— Rina S.</p>
+          </div>
+
+          <div class="bg-white text-ink border-[3px] border-secondary rounded-2xl p-6 relative">
+            <div class="absolute -top-4 left-4 bg-secondary text-ink border-[3px] border-ink rounded-full w-12 h-12 flex items-center justify-center text-2xl">⚡</div>
+            <div class="flex gap-1 mt-4 mb-2 text-yellow-500">★★★★★</div>
+            <p class="text-sm leading-relaxed font-bold">"Beli Saiyan figure di sini. Kualitas cetak dan warnanya premium banget, harganya juga miring!"</p>
+            <p class="font-black mt-3 text-primary">— Bagas P.</p>
+          </div>
+
+          <div class="bg-white text-ink border-[3px] border-secondary rounded-2xl p-6 relative">
+            <div class="absolute -top-4 left-4 bg-secondary text-ink border-[3px] border-ink rounded-full w-12 h-12 flex items-center justify-center text-2xl">🎀</div>
+            <div class="flex gap-1 mt-4 mb-2 text-yellow-500">★★★★★</div>
+            <p class="text-sm leading-relaxed font-bold">"Jubah cosplay Akatsuki pas banget bahannya. Nggak panas & nyaman banget buat event jejepangan."</p>
+            <p class="font-black mt-3 text-primary">— Yuki M.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Location & Contact Form -->
+    <section id="contact" class="max-w-7xl mx-auto px-4 py-16">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <h2 class="font-display text-5xl text-stroke-thick text-primary">KUNJUNGI RUKO KAMI</h2>
+          <p class="mt-4 text-slate-600 font-bold leading-relaxed">
+            Ingin melihat langsung action figure pilihan kamu atau mencoba ukuran kostum cosplay sebelum membeli? Mampir saja ke ruko offline kami!
+          </p>
+          <div class="mt-6 space-y-4 font-bold">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">📍</span>
+              <span>Ruko SUKEN, Jl. Otaku Raya No. 9, Jakarta Barat</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">📞</span>
+              <span>WhatsApp: +62 812-3456-7890</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">⏰</span>
+              <span>Setiap Hari: 09:00 - 21:00 WIB</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Live WhatsApp Form -->
+        <div class="bg-secondary border-[3px] border-ink rounded-2xl p-6 shadow-comic-lg">
+          <h3 class="font-display text-2xl mb-4 text-ink">Kirim Pesan WhatsApp</h3>
+          <form onsubmit="sendWhatsApp(event)" class="space-y-3 font-bold">
+            <input required id="contact-name" placeholder="Nama Lengkap" class="w-full px-4 py-3 bg-white border-[3px] border-ink rounded-lg focus:outline-none" />
+            <textarea required id="contact-message" placeholder="Tanyakan stok produk / tanya lokasi..." rows="4" class="w-full px-4 py-3 bg-white border-[3px] border-ink rounded-lg focus:outline-none"></textarea>
+            <button type="submit" class="w-full bg-primary text-white border-[3px] border-ink rounded-lg py-3 font-black text-lg shadow-comic hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+              KIRIM SEKARANG 📱
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-ink text-white py-12 border-t-[3px] border-ink">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="font-display text-3xl text-secondary text-stroke">SUKEN MERCHANDISE</p>
+        <p class="text-xs font-bold opacity-60 mt-2">© 2026 SUKEN. Hak Cipta Dilindungi Undang-Undang.</p>
+      </div>
+    </footer>
+
+    <!-- Interactive Demo Modal / Notification Toast -->
+    <div id="toast-notify" class="fixed bottom-6 right-6 z-50 bg-secondary text-ink border-[3px] border-ink p-4 rounded-xl shadow-comic-lg hidden transform translate-y-20 transition-transform duration-300">
+      <div class="flex items-center gap-2">
+        <span class="text-2xl">🎉</span>
+        <span id="toast-text" class="font-black text-sm">Produk berhasil ditambahkan!</span>
+      </div>
+    </div>
+
+    <!-- Script for Interactive Demo Logic -->
+    <script>
+      let cartCount = 0;
+
+      function addToCart(productName) {
+        cartCount++;
+        document.getElementById('cart-badge').innerText = cartCount;
+        
+        // Show Toast
+        const toast = document.getElementById('toast-notify');
+        document.getElementById('toast-text').innerText = productName + ' ditambahkan ke keranjang (Demo)!';
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.remove('translate-y-20'), 50);
+        
+        // Confetti explosion
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.8 },
+          colors: ['#E63946', '#FFBE0B', '#1A1A2E']
+        });
+
+        // Hide Toast after 3 seconds
+        setTimeout(() => {
+          toast.classList.add('translate-y-20');
+          setTimeout(() => toast.classList.add('hidden'), 300);
+        }, 3000);
+      }
+
+      function toggleCart() {
+        if (cartCount === 0) {
+          alert("Keranjang Demo Anda masih kosong! Klik tombol '+' di produk untuk menambah.");
+        } else {
+          alert("Ini adalah mode demo statis. Versi lengkap dengan checkout WhatsApp, akun pelanggan, dan panel admin dapat diakses di deployment runtime lengkap.");
+        }
+      }
+
+      function filterProducts(category) {
+        // Update tab buttons style
+        const tabs = document.querySelectorAll('.filter-tab');
+        tabs.forEach(tab => {
+          tab.classList.remove('bg-primary', 'text-white');
+          tab.classList.add('hover:bg-secondary');
+        });
+        
+        event.target.classList.add('bg-primary', 'text-white');
+        event.target.classList.remove('hover:bg-secondary');
+
+        // Filter products list
+        const items = document.querySelectorAll('.product-item');
+        items.forEach(item => {
+          if (category === 'all' || item.classList.contains(category)) {
+            item.style.display = 'block';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+
+      function sendWhatsApp(e) {
+        e.preventDefault();
+        const name = document.getElementById('contact-name').value;
+        const msg = document.getElementById('contact-message').value;
+        const text = encodeURIComponent(`Halo SUKEN! Nama saya ${name}. ${msg}`);
+        window.open(`https://wa.me/6281234567890?text=${text}`, '_blank');
+      }
+    </script>
   </body>
 </html>
